@@ -4,3 +4,6 @@
 [submodule "RioTintU-App/src/RioTintU-VM"]
 	path = RioTintU-App/src/RioTintU-VM
 	url = https://github.com/andersonalexsandro/RioTintU-VM.git
+[submodule "RioTintU-App/RioTintU-App/src/RioTintU-VM"]
+	path = RioTintU-App/RioTintU-App/src/RioTintU-VM
+	url = https://github.com/andersonalexsandro/RioTintU-VM.git
