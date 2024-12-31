@@ -55,7 +55,6 @@ export function Flags() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 12,
     backgroundColor: '#242424',
     width: '100%',
     height: 100,
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#777777',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
   },
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   orange: {
+    fontSize: 15,
     color: '#CF7235',
     fontWeight: 'bold',
   },
