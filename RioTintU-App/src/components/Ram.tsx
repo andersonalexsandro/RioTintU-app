@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     color: '#777777',
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   scrollView: {
     flex: 1,
