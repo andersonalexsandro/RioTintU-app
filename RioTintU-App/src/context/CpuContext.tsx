@@ -13,6 +13,7 @@ import { MobileFileManager } from '../uitls/mobileFileManager';
 import { WebFileManager } from '../uitls/webFileManager';
 import { NodeFileReader } from '../RioTintU-VM/ts/src/nodeFileReader';
 import { FileManager } from '../RioTintU-VM/ts/src/assembler/fileManager';
+import { Assembler } from '../RioTintU-VM/ts/src/assembler/assembler';
 '../RioTintU-VM/ts/src/assembler/assembled'
  '../RioTintU-VM/ts/src/assembler/assembly'
 
@@ -26,6 +27,7 @@ interface CPUContextProps {
   numberDisplay: NumberDisplay;
   screen: Screen;
   memoryMapper: MemoryMapper;
+  assembler: Assembler;
 }
 
 const CPUContext = createContext<CPUContextProps | null>(null);
