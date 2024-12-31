@@ -9,6 +9,7 @@ import { ProgramCounter8 } from '../RioTintU-VM/ts/src/programCounter8';
 import NumberDisplay from '../RioTintU-VM/ts/src/numberDisplay';
 import MemoryMapper from '../RioTintU-VM/ts/src/memoryMapper';
 import Screen from '../RioTintU-VM/ts/src/screen';
+import { MobileFileManager } from '../uitls/mobileFileManager';
 
 interface CPUContextProps {
   cpu: CPU;
@@ -25,7 +26,7 @@ interface CPUContextProps {
 const CPUContext = createContext<CPUContextProps | null>(null);
 
 export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const cpuComponents = useMemo(() => RioTintUInit(), []);
+  const cpuComponents = useMemo(() => RioTintUInit(new MobileFileManager('../RioTintU-VM/ts/src/assembler/assembly', '../RioTintU-VM/ts/src/assembler/assembled')), []);
   
   return (
     <CPUContext.Provider value={cpuComponents}>
