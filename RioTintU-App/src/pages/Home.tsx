@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { Ram } from '../components/Ram';
 import { Flags } from '../components/Flags';
 import Registers from '../components/Registers';
+import { Code } from '../components/Code';
 
 export function Home() {
 
@@ -17,7 +18,7 @@ export function Home() {
         <Text style={styles.text}>Coluna 2</Text>
       </View>
       <View style={[styles.column, { flex: 1.25 }]}>
-        <Text style={styles.text}>Coluna 3</Text>
+        <Code />
       </View>
     </View>
   );
