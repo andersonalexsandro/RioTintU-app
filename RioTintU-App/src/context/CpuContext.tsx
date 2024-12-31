@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
 import { RioTintUInit } from '../RioTintU-VM/ts/src';
 import CPU from '../RioTintU-VM/ts/src/cpu';
 import Ram from '../RioTintU-VM/ts/src/ram';
@@ -11,11 +11,8 @@ import MemoryMapper from '../RioTintU-VM/ts/src/memoryMapper';
 import Screen from '../RioTintU-VM/ts/src/screen';
 import { MobileFileManager } from '../uitls/mobileFileManager';
 import { WebFileManager } from '../uitls/webFileManager';
-import { NodeFileReader } from '../RioTintU-VM/ts/src/nodeFileReader';
 import { FileManager } from '../RioTintU-VM/ts/src/assembler/fileManager';
 import { Assembler } from '../RioTintU-VM/ts/src/assembler/assembler';
-'../RioTintU-VM/ts/src/assembler/assembled'
- '../RioTintU-VM/ts/src/assembler/assembly'
 
 interface CPUContextProps {
   cpu: CPU;
@@ -28,6 +25,7 @@ interface CPUContextProps {
   screen: Screen;
   memoryMapper: MemoryMapper;
   assembler: Assembler;
+  triggerUpdate: () => void;
 }
 
 const CPUContext = createContext<CPUContextProps | null>(null);
@@ -43,6 +41,12 @@ function detectEnvironment(): "mobile" | "web" | "node" {
 }
 
 export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [_, setUpdateFlag] = useState(false); // Local state for reactivity
+
+  const triggerUpdate = useCallback(() => {
+    setUpdateFlag((prev) => !prev);
+  }, []);
+
   const cpuComponents = useMemo(() => {
     const environment = detectEnvironment();
 
@@ -55,9 +59,6 @@ export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       case "web":
         fileManager = new WebFileManager('web-assembly', 'web-assembled');
         break;
-      case "node":
-        fileManager = new NodeFileReader('./src/assembler/assembly', './src/assembler/assembled');
-        break;
       default:
         throw new Error('Unsupported environment');
     }
@@ -66,8 +67,22 @@ export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       throw new Error('FileManager is required');
     }
 
-    return RioTintUInit(fileManager);
-  }, []);
+    const { cpu, ram, rom, registers, flags, pc, numberDisplay, screen, memoryMapper, assembler } = RioTintUInit(fileManager);
+
+    return {
+      cpu,
+      ram,
+      rom,
+      registers,
+      flags,
+      pc,
+      numberDisplay,
+      screen,
+      memoryMapper,
+      assembler,
+      triggerUpdate,
+    };
+  }, [triggerUpdate]);
 
   return (
     <CPUContext.Provider value={cpuComponents}>
@@ -75,8 +90,6 @@ export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     </CPUContext.Provider>
   );
 };
-
-
 
 export const useCPU = () => {
   const context = useContext(CPUContext);

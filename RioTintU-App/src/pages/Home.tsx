@@ -7,26 +7,27 @@ import { Code } from '../components/Code';
 import { useCPU } from '../context/CpuContext';
 
 export function Home() {
-  const { rom, assembler, cpu, pc} = useCPU();
-  const [codeLines, setCodeLines]  = useState<string[]>([]);
+  const { rom, assembler, cpu, pc, triggerUpdate } = useCPU();
+  const [codeLines, setCodeLines] = useState<string[]>([]);
   const [compile, setCompile] = useState(false);
-  const [step, setStep] = useState(false);
   const [halted, setHalted] = useState(false);
 
-  useEffect(() =>{
-    setCompile(false);
-    const assembledCode = assembler.assemble(codeLines);
-    assembledCode.forEach((line, index) => rom.set16(index, parseInt(line, 10)))
-  }, [compile])
-
   useEffect(() => {
-    setStep(false);
-    if (halted){
-      pc.jump(0)
+    if (compile) {
+      setCompile(false);
+      const assembledCode = assembler.assemble(codeLines);
+      assembledCode.forEach((line, index) => rom.set16(index, parseInt(line, 10)));
+    }
+  }, [compile, assembler, rom, codeLines]);
+
+  const handleStep = () => {
+    if (halted) {
+      pc.jump(0);
       setHalted(false);
     }
-    cpu.step()
-  }, [step])
+    cpu.step(); // Executa um passo da CPU
+    triggerUpdate(); // Atualiza os componentes que dependem do contexto
+  };
 
   return (
     <View style={styles.homeWrapper}>
@@ -38,8 +39,8 @@ export function Home() {
       <View style={[styles.column, { flex: 2 }]}>
         <View>
           <Button title="Compile" onPress={() => setCompile(true)} />
-          <Button title="Step" onPress={() => setStep(true)} />
-          <Text style={styles.text}>PC:{pc.getCounter()}</Text>
+          <Button title="Step" onPress={handleStep} />
+          <Text style={styles.text}>PC: {pc.getCounter()}</Text>
         </View>
       </View>
       <View style={[styles.column, { flex: 1.25 }]}>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     flexDirection: 'column',
-    gap: 15
+    gap: 15,
   },
   text: {
     color: 'white',
