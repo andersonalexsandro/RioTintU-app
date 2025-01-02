@@ -1,21 +1,22 @@
 import React, { createContext, useReducer, useContext } from "react";
-import { RioTintUInit } from "../RioTintU-VM/ts/src";
+import { Assembler, CPU, Flags, MemoryMapper, NumberDisplay, ProgramCounter8, ProgramRom16, Registers, RioTintUInit, Screen } from "../RioTintU-VM/ts/src";
 import { FileManager } from "../RioTintU-VM/ts/src/assembler/fileManager";
 import { MobileFileManager } from "../uitls/mobileFileManager";
 import { WebFileManager } from "../uitls/webFileManager";
+import Ram from "../RioTintU-VM/ts/src/ram";
 
 // Define a interface do estado
 interface CPUState {
-  cpu: any;
-  ram: any;
-  rom: any;
-  registers: any;
-  flags: any;
-  pc: any;
-  numberDisplay: any;
-  screen: any;
-  memoryMapper: any;
-  assembler: any;
+  cpu: CPU;
+  ram: Ram;
+  rom: ProgramRom16;
+  registers: Registers;
+  flags: Flags;
+  pc: ProgramCounter8;
+  numberDisplay: NumberDisplay;
+  screen: Screen;
+  memoryMapper: MemoryMapper;
+  assembler: Assembler;
 }
 
 // Define o tipo de ação para o reducer

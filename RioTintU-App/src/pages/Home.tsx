@@ -21,7 +21,14 @@ export function Home() {
 
   const handleCompile = () => {
     const assembledCode = assembler.assemble(codeLines);
-    assembledCode.forEach((line: string, index: number) => rom.set16(index, parseInt(line, 10)));
+    const assembledNumber = assembledCode.map((binaryString) => {
+      return parseInt(binaryString, 2);
+    });
+    for (let i = 0; i < assembledCode.length; i++){
+      console.log(assembledCode[i]);
+      console.log(assembledNumber[i]);
+      rom.set16(i, assembledNumber[i])
+    }
   };
 
   return (
