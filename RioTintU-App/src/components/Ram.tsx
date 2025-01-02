@@ -3,30 +3,32 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useCPU } from '../context/CpuContext';
 
 export function Ram() {
-  const { ram } = useCPU();
-  const dataView = ram.getDataView();
+  // Obtém a RAM do estado global do contexto
+  const { state } = useCPU();
+  const dataView = state.ram.getDataView();
 
+  // Renderiza os dados da memória em um formato de tabela
   const renderDataView = () => {
-    const columns = 8; // Number of columns
-    const totalRows = Math.ceil(dataView.byteLength / columns); // Total rows required
+    const columns = 8; // Número de colunas
+    const totalRows = Math.ceil(dataView.byteLength / columns); // Calcula o número total de linhas
     const rows = [];
 
     for (let row = 0; row < totalRows; row++) {
       const items = [];
       for (let col = 0; col < columns; col++) {
-        const index = row + col * totalRows; // Calculate vertical index
+        const index = row + col * totalRows; // Índice vertical
         if (index < dataView.byteLength) {
-          const value = dataView.getUint8(index).toString().padStart(3, '0'); // Format value
-          const formattedIndex = index.toString().padStart(3, '0'); // Format index
+          const value = dataView.getUint8(index).toString().padStart(3, '0'); // Formata o valor
+          const formattedIndex = index.toString().padStart(3, '0'); // Formata o índice
           items.push(
             <View key={index} style={styles.item}>
               <Text style={styles.text}>
-                <span style={styles.orange}>{formattedIndex}</span>: {value}
+                <Text style={styles.orange}>{formattedIndex}</Text>: {value}
               </Text>
             </View>
           );
         } else {
-          // Empty cell for padding rows
+          // Preenche células vazias para alinhamento
           items.push(
             <View key={`empty-${col}-${row}`} style={styles.item}>
               <Text style={styles.text}> </Text>
@@ -46,7 +48,7 @@ export function Ram() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ram:</Text>
+      <Text style={styles.title}>RAM:</Text>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
         {renderDataView()}
       </ScrollView>
@@ -54,6 +56,7 @@ export function Ram() {
   );
 }
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
@@ -93,11 +96,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   orange: {
-    color: '#CF7235'
-  }
+    color: '#CF7235',
+  },
 });
 
-// Minimalistic scrollbar style (for web platforms)
+// Estilo minimalista de scrollbar para plataformas web
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.innerHTML = `

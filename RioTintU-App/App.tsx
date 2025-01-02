@@ -9,17 +9,17 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <CPUProvider>
-          <Stack.Navigator initialRouteName="Home">
-              <Stack.Screen 
-                name="Home" 
-                component={Home} 
-                options={{ headerShown: false }} 
-              />
-          </Stack.Navigator>
-        <StatusBar style="auto" />
-      </CPUProvider>
-    </NavigationContainer>
+    <CPUProvider>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen 
+                  name="Home" 
+                  component={Home} 
+                  options={{ headerShown: false }} 
+                />
+            </Stack.Navigator>
+          <StatusBar style="auto" />
+       </NavigationContainer>
+    </CPUProvider>
   );
 }

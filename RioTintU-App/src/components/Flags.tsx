@@ -1,8 +1,11 @@
+import React from 'react';
 import { Text, View, StyleSheet } from "react-native";
 import { useCPU } from "../context/CpuContext";
 
 export function Flags() {
-  const { flags } = useCPU();
+  // Obtém as flags do estado global
+  const { state } = useCPU();
+  const { flags } = state;
 
   return (
     <View style={styles.container}>
@@ -11,41 +14,41 @@ export function Flags() {
         <View style={styles.column}>
           <View style={styles.row}>
             <Text style={styles.text}>COUT:</Text>
-            <Text style={styles.orange}>{flags.getCout() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{flags.getCout() ? "True" : "False"}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.text}>!COUT:</Text>
-            <Text style={styles.orange}>{!flags.getCout() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{!flags.getCout() ? "True" : "False"}</Text>
           </View>
         </View>
         <View style={styles.column}>
           <View style={styles.row}>
             <Text style={styles.text}>ZERO:</Text>
-            <Text style={styles.orange}>{flags.getZero() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{flags.getZero() ? "True" : "False"}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.text}>!ZERO:</Text>
-            <Text style={styles.orange}>{!flags.getZero() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{!flags.getZero() ? "True" : "False"}</Text>
           </View>
         </View>
         <View style={styles.column}>
           <View style={styles.row}>
             <Text style={styles.text}>MSB:</Text>
-            <Text style={styles.orange}>{flags.getMsb() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{flags.getMsb() ? "True" : "False"}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.text}>!MSB:</Text>
-            <Text style={styles.orange}>{!flags.getMsb() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{!flags.getMsb() ? "True" : "False"}</Text>
           </View>
         </View>
         <View style={styles.column}>
           <View style={styles.row}>
             <Text style={styles.text}>EVEN:</Text>
-            <Text style={styles.orange}>{flags.getEven() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{flags.getEven() ? "True" : "False"}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.text}>!EVEN:</Text>
-            <Text style={styles.orange}>{!flags.getEven() ? 'True' : 'False'}</Text>
+            <Text style={styles.orange}>{!flags.getEven() ? "True" : "False"}</Text>
           </View>
         </View>
       </View>

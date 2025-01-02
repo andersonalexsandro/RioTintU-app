@@ -1,100 +1,82 @@
-import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
-import { RioTintUInit } from '../RioTintU-VM/ts/src';
-import CPU from '../RioTintU-VM/ts/src/cpu';
-import Ram from '../RioTintU-VM/ts/src/ram';
-import ProgramRom16 from '../RioTintU-VM/ts/src/programRom16';
-import { Registers } from '../RioTintU-VM/ts/src/registers';
-import { Flags } from '../RioTintU-VM/ts/src/flags';
-import { ProgramCounter8 } from '../RioTintU-VM/ts/src/programCounter8';
-import NumberDisplay from '../RioTintU-VM/ts/src/numberDisplay';
-import MemoryMapper from '../RioTintU-VM/ts/src/memoryMapper';
-import Screen from '../RioTintU-VM/ts/src/screen';
-import { MobileFileManager } from '../uitls/mobileFileManager';
-import { WebFileManager } from '../uitls/webFileManager';
-import { FileManager } from '../RioTintU-VM/ts/src/assembler/fileManager';
-import { Assembler } from '../RioTintU-VM/ts/src/assembler/assembler';
+import React, { createContext, useReducer, useContext } from "react";
+import { RioTintUInit } from "../RioTintU-VM/ts/src";
+import { FileManager } from "../RioTintU-VM/ts/src/assembler/fileManager";
+import { MobileFileManager } from "../uitls/mobileFileManager";
+import { WebFileManager } from "../uitls/webFileManager";
 
-interface CPUContextProps {
-  cpu: CPU;
-  ram: Ram;
-  rom: ProgramRom16;
-  registers: Registers;
-  flags: Flags;
-  pc: ProgramCounter8;
-  numberDisplay: NumberDisplay;
-  screen: Screen;
-  memoryMapper: MemoryMapper;
-  assembler: Assembler;
-  triggerUpdate: () => void;
+// Define a interface do estado
+interface CPUState {
+  cpu: any;
+  ram: any;
+  rom: any;
+  registers: any;
+  flags: any;
+  pc: any;
+  numberDisplay: any;
+  screen: any;
+  memoryMapper: any;
+  assembler: any;
 }
 
-const CPUContext = createContext<CPUContextProps | null>(null);
+// Define o tipo de ação para o reducer
+type CPUAction = { type: "STEP" } | { type: "RESET" };
 
-function detectEnvironment(): "mobile" | "web" | "node" {
-  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+// Cria o contexto
+const CPUContext = createContext<{
+  state: CPUState;
+  dispatch: React.Dispatch<CPUAction>;
+} | null>(null);
+
+// Detecta o ambiente para o FileManager
+function detectEnvironment(): "mobile" | "web" {
+  if (typeof navigator !== "undefined" && navigator.product === "ReactNative") {
     return "mobile";
-  } else if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-    return "web";
-  } else {
-    return "node";
   }
+  return "web";
 }
 
-export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [_, setUpdateFlag] = useState(false); // Local state for reactivity
+// Reducer para gerenciar as ações do CPU
+const cpuReducer = (state: CPUState, action: CPUAction): CPUState => {
+  switch (action.type) {
+    case "STEP":
+      state.cpu.step(); // Executa um passo da CPU
+      return { ...state }; // Retorna o novo estado (imutável)
+    case "RESET":
+      state.pc.jump(0); // Reseta o contador do programa
+      return { ...state }; // Retorna o estado atualizado
+    default:
+      return state;
+  }
+};
 
-  const triggerUpdate = useCallback(() => {
-    setUpdateFlag((prev) => !prev);
-  }, []);
+// Provider para gerenciar o estado global da CPU
+export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const environment = detectEnvironment();
+  let fileManager: FileManager;
 
-  const cpuComponents = useMemo(() => {
-    const environment = detectEnvironment();
+  if (environment === "mobile") {
+    fileManager = new MobileFileManager("./assembly", "./assembled");
+  } else {
+    fileManager = new WebFileManager("web-assembly", "web-assembled");
+  }
 
-    let fileManager: FileManager | null = null;
-
-    switch (environment) {
-      case "mobile":
-        fileManager = new MobileFileManager('./assembly', './assembled');
-        break;
-      case "web":
-        fileManager = new WebFileManager('web-assembly', 'web-assembled');
-        break;
-      default:
-        throw new Error('Unsupported environment');
-    }
-
-    if (!fileManager) {
-      throw new Error('FileManager is required');
-    }
-
-    const { cpu, ram, rom, registers, flags, pc, numberDisplay, screen, memoryMapper, assembler } = RioTintUInit(fileManager);
-
-    return {
-      cpu,
-      ram,
-      rom,
-      registers,
-      flags,
-      pc,
-      numberDisplay,
-      screen,
-      memoryMapper,
-      assembler,
-      triggerUpdate,
-    };
-  }, [triggerUpdate]);
+  const initialState = RioTintUInit(fileManager); // Inicializa os componentes da CPU
+  const [state, dispatch] = useReducer(cpuReducer, initialState);
 
   return (
-    <CPUContext.Provider value={cpuComponents}>
+    <CPUContext.Provider value={{ state, dispatch }}>
       {children}
     </CPUContext.Provider>
   );
 };
 
+// Hook para acessar o contexto
 export const useCPU = () => {
   const context = useContext(CPUContext);
   if (!context) {
-    throw new Error('useCPU must be used within a CPUProvider');
+    throw new Error("useCPU must be used within a CPUProvider");
   }
   return context;
 };

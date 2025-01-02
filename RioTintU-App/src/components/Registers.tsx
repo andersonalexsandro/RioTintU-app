@@ -3,12 +3,15 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useCPU } from '../context/CpuContext';
 
 export function Registers() {
-  const { registers } = useCPU();
+  // Obtém os registradores do estado global
+  const { state } = useCPU();
+  const { registers } = state;
   const registerNames = registers.getRegisterNames();
 
+  // Renderiza os valores dos registradores em colunas
   const renderRegisters = () => {
-    const columns = 4; 
-    const totalRows = Math.ceil(registerNames.length / columns);
+    const columns = 4; // Número de colunas na tabela
+    const totalRows = Math.ceil(registerNames.length / columns); // Total de linhas necessárias
     const rows = [];
 
     for (let row = 0; row < totalRows; row++) {
@@ -26,6 +29,7 @@ export function Registers() {
             </View>
           );
         } else {
+          // Adiciona células vazias para alinhamento
           items.push(
             <View key={`empty-${col}-${row}`} style={styles.item}>
               <Text style={styles.text}> </Text>
@@ -46,7 +50,7 @@ export function Registers() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Registers:</Text>
-        {renderRegisters()}
+      {renderRegisters()}
     </View>
   );
 }
