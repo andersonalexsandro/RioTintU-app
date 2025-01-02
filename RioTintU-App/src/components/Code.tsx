@@ -10,17 +10,12 @@ interface CodeProps {
   export function Code({ setCodeLines }: CodeProps) {
   const [code, setCode] = useState("");
 
-  const getCodeLines = () => {
-    return code.split('\n');
-    
-  }
-
   const handleTextChange = (text: string) => {
     setCode(text);
-    setCodeLines(getCodeLines());
-    console.log(getCodeLines());
-    
+    setCodeLines(text.split("\n")); // Usa o valor atualizado diretamente
+    console.log(text.split("\n"));
   };
+  
 
   return (
     <View style={styles.container}>
