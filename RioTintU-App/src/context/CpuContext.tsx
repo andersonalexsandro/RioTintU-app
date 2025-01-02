@@ -5,7 +5,7 @@ import { MobileFileManager } from "../uitls/mobileFileManager";
 import { WebFileManager } from "../uitls/webFileManager";
 import Ram from "../RioTintU-VM/ts/src/ram";
 
-// Define a interface do estado
+// Define the state interface
 interface CPUState {
   cpu: CPU;
   ram: Ram;
@@ -19,16 +19,16 @@ interface CPUState {
   assembler: Assembler;
 }
 
-// Define o tipo de ação para o reducer
+// Define the action type for the reducer
 type CPUAction = { type: "STEP" } | { type: "RESET" };
 
-// Cria o contexto
+// Create the context
 const CPUContext = createContext<{
   state: CPUState;
   dispatch: React.Dispatch<CPUAction>;
 } | null>(null);
 
-// Detecta o ambiente para o FileManager
+// Detect the environment for FileManager
 function detectEnvironment(): "mobile" | "web" {
   if (typeof navigator !== "undefined" && navigator.product === "ReactNative") {
     return "mobile";
@@ -36,21 +36,21 @@ function detectEnvironment(): "mobile" | "web" {
   return "web";
 }
 
-// Reducer para gerenciar as ações do CPU
+// Reducer to manage CPU actions
 const cpuReducer = (state: CPUState, action: CPUAction): CPUState => {
   switch (action.type) {
     case "STEP":
-      state.cpu.step(); // Executa um passo da CPU
-      return { ...state }; // Retorna o novo estado (imutável)
+      state.cpu.step(); // Executes one CPU step
+      return { ...state }; // Returns the new state (immutable)
     case "RESET":
-      state.pc.jump(0); // Reseta o contador do programa
-      return { ...state }; // Retorna o estado atualizado
+      state.pc.jump(0); // Resets the program counter
+      return { ...state }; // Returns the updated state
     default:
       return state;
   }
 };
 
-// Provider para gerenciar o estado global da CPU
+// Provider to manage the global state of the CPU
 export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -63,7 +63,7 @@ export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({
     fileManager = new WebFileManager("web-assembly", "web-assembled");
   }
 
-  const initialState = RioTintUInit(fileManager); // Inicializa os componentes da CPU
+  const initialState = RioTintUInit(fileManager);
   const [state, dispatch] = useReducer(cpuReducer, initialState);
 
   return (
@@ -73,7 +73,7 @@ export const CPUProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Hook para acessar o contexto
+// Hook to access the context
 export const useCPU = () => {
   const context = useContext(CPUContext);
   if (!context) {

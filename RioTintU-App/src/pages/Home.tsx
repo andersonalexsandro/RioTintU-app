@@ -7,16 +7,16 @@ import { Code } from "../components/Code";
 import { useCPU } from "../context/CpuContext";
 
 export function Home() {
-  const { state, dispatch } = useCPU(); // Acessa o estado e o dispatch do contexto
-  const { pc, assembler, rom } = state; // Extrai valores do estado global
+  const { state, dispatch } = useCPU(); // Accesses the state and dispatch from the context
+  const { pc, assembler, rom } = state; // Extracts values from the global state
   const [codeLines, setCodeLines] = React.useState<string[]>([]);
 
   const handleStep = () => {
-    dispatch({ type: "STEP" }); // Executa um passo da CPU e atualiza os componentes
+    dispatch({ type: "STEP" }); // Executes a CPU step and updates the components
   };
 
   const handleReset = () => {
-    dispatch({ type: "RESET" }); // Reseta o estado da CPU
+    dispatch({ type: "RESET" }); // Resets the CPU state
   };
 
   const handleCompile = () => {
@@ -24,10 +24,8 @@ export function Home() {
     const assembledNumber = assembledCode.map((binaryString) => {
       return parseInt(binaryString, 2);
     });
-    for (let i = 0; i < assembledCode.length; i++){
-      console.log(assembledCode[i]);
-      console.log(assembledNumber[i]);
-      rom.set16(i, assembledNumber[i])
+    for (let i = 0; i < assembledCode.length; i++) {
+      rom.set16(i, assembledNumber[i]);
     }
   };
 
@@ -57,13 +55,13 @@ const styles = StyleSheet.create({
   homeWrapper: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "black",
+    backgroundColor: "black", 
   },
   column: {
     padding: 10,
     flex: 1,
     flexDirection: "column",
-    gap: 15,
+    gap: 15, 
   },
   text: {
     color: "white",
