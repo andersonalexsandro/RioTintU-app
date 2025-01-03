@@ -28,19 +28,15 @@ export function Flags() {
       <View style={styles.columnsContainer}>
         <View style={styles.column}>
           {renderFlagRow("COUT", flags.getCout())}
-          {renderFlagRow("!COUT", !flags.getCout())}
         </View>
         <View style={styles.column}>
           {renderFlagRow("ZERO", flags.getZero())}
-          {renderFlagRow("!ZERO", !flags.getZero())}
         </View>
         <View style={styles.column}>
           {renderFlagRow("MSB", flags.getMsb())}
-          {renderFlagRow("!MSB", !flags.getMsb())}
         </View>
         <View style={styles.column}>
           {renderFlagRow("EVEN", flags.getEven())}
-          {renderFlagRow("!EVEN", !flags.getEven())}
         </View>
       </View>
     </View>
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
     width: '100%',
-    height: '11%',
+    height: '9%',
     borderRadius: 24,
     padding: 15,
   },
