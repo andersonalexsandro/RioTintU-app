@@ -51,7 +51,7 @@ export function Code({ setCodeLines, pc }: CodeProps) {
             pc === currentNumber && styles.currentLine,
           ]}
         >
-          {currentNumber + 1}
+          {currentNumber}
         </Text>
       );
     });
