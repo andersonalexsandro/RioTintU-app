@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { View, TextInput, ScrollView, StyleSheet, Text } from "react-native";
 
+const INSTRUCTIONS = [
+  "nop", "hlt", "add", "sub", "nor", "and", "xor", "rsh",
+  "ldi", "adi", "jmp", "brh", "jid", "adc", "lod", "str"
+];
+
 interface CodeProps {
   setCodeLines: React.Dispatch<React.SetStateAction<string[]>>;
   pc: number;
@@ -21,11 +26,16 @@ export function Code({ setCodeLines, pc }: CodeProps) {
     return lines.map((line, index) => {
       const trimmedLine = line.trim();
 
-      // Check if the line is a comment or label
-      if (trimmedLine.startsWith("/") || trimmedLine.startsWith(".")) {
+      // Check if the line is empty, a comment, or a label
+      if (
+        trimmedLine === "" || // Empty line
+        trimmedLine.startsWith("/") || // Line starts with `/`
+        trimmedLine.startsWith("#") || // Line starts with `#`
+        trimmedLine.startsWith(".") // Line is a label
+      ) {
         return (
           <Text key={index} style={[styles.lineNumber, { opacity: 0 }]}>
-            ""
+            ""{/* Invisible placeholder */}
           </Text>
         );
       }
@@ -41,7 +51,7 @@ export function Code({ setCodeLines, pc }: CodeProps) {
             pc === currentNumber && styles.currentLine,
           ]}
         >
-          {currentNumber}
+          {currentNumber + 1}
         </Text>
       );
     });
@@ -55,11 +65,14 @@ export function Code({ setCodeLines, pc }: CodeProps) {
         contentContainerStyle={styles.scrollViewContent}
       >
         <View style={styles.codeWrapper}>
+          {/* Line Numbers */}
           <View style={styles.lineNumbers}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
               {renderLineNumbers()}
             </ScrollView>
           </View>
+
+          {/* Code Editor */}
           <TextInput
             style={styles.input}
             multiline
@@ -99,26 +112,25 @@ const styles = StyleSheet.create({
   },
   lineNumbers: {
     backgroundColor: "#2e2e2e",
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-    alignItems: "flex-end",
+    paddingVertical: 10, // Adjusts vertical padding inside the line number column
+    width: 25,
+    alignItems: "center",
   },
   lineNumber: {
     color: "#999999",
     textAlign: "right",
-    fontSize: 14,
-    lineHeight: 20, // Match lineHeight with input text
+    fontSize: 20, // Match font size with code input
+    lineHeight: 28, // Ensure this matches the codeLine lineHeight
   },
   input: {
     flex: 1,
     color: "#ffffff",
-    fontSize: 14,
+    fontSize: 20, // Match font size with line numbers
+    lineHeight: 28, // Match lineHeight with line numbers
     fontWeight: "600", // Semi-bold
     backgroundColor: "#1e1e1e",
     padding: 10,
     textAlignVertical: "top",
-    lineHeight: 20, // Match lineHeight with line numbers
-    height: "100%",
   },
   currentLine: {
     color: "#b3591e", // Highlight color for the current line
@@ -146,4 +158,4 @@ if (typeof document !== "undefined") {
   document.head.appendChild(style);
 }
 
-export default Code;  
+export default Code;
