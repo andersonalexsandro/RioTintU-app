@@ -2,54 +2,45 @@ import React from 'react';
 import { Text, View, StyleSheet } from "react-native";
 import { useCPU } from "../context/CpuContext";
 
+/**
+ * Componente Flags
+ * Exibe o estado das flags do CPU em colunas organizadas.
+ */
 export function Flags() {
-  // Obtém as flags do estado global
   const { state } = useCPU();
   const { flags } = state;
+
+  /**
+   * Renderiza uma linha de flag com seu valor verdadeiro e invertido.
+   * @param {string} label - Nome da flag.
+   * @param {boolean} value - Valor atual da flag.
+   */
+  const renderFlagRow = (label: string, value: boolean) => (
+    <View style={styles.row}>
+      <Text style={styles.text}>{label}:</Text>
+      <Text style={styles.orange}>{value ? " True" : " False"}</Text>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Flags:</Text>
       <View style={styles.columnsContainer}>
         <View style={styles.column}>
-          <View style={styles.row}>
-            <Text style={styles.text}>COUT:</Text>
-            <Text style={styles.orange}>{flags.getCout() ? "True" : "False"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.text}>!COUT:</Text>
-            <Text style={styles.orange}>{!flags.getCout() ? "True" : "False"}</Text>
-          </View>
+          {renderFlagRow("COUT", flags.getCout())}
+          {renderFlagRow("!COUT", !flags.getCout())}
         </View>
         <View style={styles.column}>
-          <View style={styles.row}>
-            <Text style={styles.text}>ZERO:</Text>
-            <Text style={styles.orange}>{flags.getZero() ? "True" : "False"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.text}>!ZERO:</Text>
-            <Text style={styles.orange}>{!flags.getZero() ? "True" : "False"}</Text>
-          </View>
+          {renderFlagRow("ZERO", flags.getZero())}
+          {renderFlagRow("!ZERO", !flags.getZero())}
         </View>
         <View style={styles.column}>
-          <View style={styles.row}>
-            <Text style={styles.text}>MSB:</Text>
-            <Text style={styles.orange}>{flags.getMsb() ? "True" : "False"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.text}>!MSB:</Text>
-            <Text style={styles.orange}>{!flags.getMsb() ? "True" : "False"}</Text>
-          </View>
+          {renderFlagRow("MSB", flags.getMsb())}
+          {renderFlagRow("!MSB", !flags.getMsb())}
         </View>
         <View style={styles.column}>
-          <View style={styles.row}>
-            <Text style={styles.text}>EVEN:</Text>
-            <Text style={styles.orange}>{flags.getEven() ? "True" : "False"}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.text}>!EVEN:</Text>
-            <Text style={styles.orange}>{!flags.getEven() ? "True" : "False"}</Text>
-          </View>
+          {renderFlagRow("EVEN", flags.getEven())}
+          {renderFlagRow("!EVEN", !flags.getEven())}
         </View>
       </View>
     </View>
@@ -66,14 +57,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#777777',
-    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 5,
+    fontSize: 16
   },
   columnsContainer: {
     flexDirection: 'row',
     gap: 20,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   column: {
     flexDirection: 'column',
@@ -87,10 +78,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#ffffff',
-    fontSize: 15,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   orange: {
-    fontSize: 15,
+    fontSize: 20,
     color: '#CF7235',
     fontWeight: 'bold',
   },
