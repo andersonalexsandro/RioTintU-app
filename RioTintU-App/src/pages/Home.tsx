@@ -5,21 +5,22 @@ import { Flags } from "../components/Flags";
 import Registers from "../components/Registers";
 import { Code } from "../components/Code";
 import { useCPU } from "../context/CpuContext";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const RioTintUClockTick = 48
+const RioTintUClockTick = 48;
 
 export function Home() {
-  const { state, dispatch } = useCPU(); // Accesses the state and dispatch from the context
-  const { pc, assembler, rom } = state; // Extracts values from the global state
+  const { state, dispatch } = useCPU();
+  const { pc, assembler, rom } = state;
   const [codeLines, setCodeLines] = useState<string[]>([]);
-  const [ticksPerSecond, setTicksPerSecond] = useState<number>(20); // Default to 20 ticks per second
+  const [ticksPerSecond, setTicksPerSecond] = useState<number>(20);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isRunning) {
-      const instructionTime = (RioTintUClockTick * 2) / ticksPerSecond * 1000; // Em milissegundos
+      const instructionTime = (RioTintUClockTick * 2) / ticksPerSecond * 1000;
       interval = setInterval(() => {
         dispatch({ type: "STEP" });
       }, instructionTime);
@@ -31,11 +32,15 @@ export function Home() {
   }, [isRunning, ticksPerSecond, dispatch]);
 
   const handleStep = () => {
-    dispatch({ type: "STEP" }); // Executes a single CPU step
+    if (isRunning){
+      setIsRunning((false));
+      return;
+    }
+    dispatch({ type: "STEP" });
   };
 
   const handleReset = () => {
-    dispatch({ type: "RESET" }); // Resets the CPU state
+    dispatch({ type: "RESET" });
   };
 
   const handleCompile = () => {
@@ -70,20 +75,23 @@ export function Home() {
         <View style={styles.buttonsWrapper}>
           <View style={styles.buttons}>
             <TouchableOpacity style={styles.button} onPress={handleCompile}>
-              <Text style={styles.buttonText}>Compile</Text>
+              <Icon name="code-braces" size={24} color="white" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handleReset}>
-              <Text style={styles.buttonText}>Reset</Text>
+              <Icon name="restart" size={24} color="white" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={handleStep}>
-              <Text style={styles.buttonText}>Step</Text>
+              <Icon name="step-forward" size={24} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleStart}>
-              <Text style={styles.buttonText}>Start</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleStop}>
-              <Text style={styles.buttonText}>Stop</Text>
-            </TouchableOpacity>
+            {isRunning ? (
+              <TouchableOpacity style={styles.button} onPress={handleStop}>
+                <Icon name="pause" size={24} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.button} onPress={handleStart}>
+                <Icon name="play" size={24} color="white" />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.tickInputWrapper}>
             <Text style={styles.text}>Ticks Per Second:</Text>
@@ -93,7 +101,7 @@ export function Home() {
               value={ticksPerSecond.toString()}
               onChangeText={(value) => {
                 const numericValue = parseInt(value, 10);
-                setTicksPerSecond(numericValue > 0 ? numericValue : 0); // Ensure it's a positive number
+                setTicksPerSecond(numericValue > 0 ? numericValue : 0);
               }}
             />
           </View>
@@ -124,34 +132,29 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontWeight: "600",
-    fontSize: 18
+    fontSize: 18,
   },
   buttonsWrapper: {
     flexDirection: "row",
-    alignItems: "center", // Align items vertically
-    justifyContent: "space-between", // Ensure proper spacing
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   buttons: {
     flexDirection: "row",
     gap: 14,
   },
   button: {
-    width: 100, // Define button width
-    height: 40, // Define button height
-    backgroundColor: "#b3591e", // Button background color
+    width: 50,
+    height: 50,
+    backgroundColor: "#b3591e",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 18,
+    borderRadius: 25,
   },
   tickInputWrapper: {
     flexDirection: "row",
-    alignItems: "center", // Align text and input vertically
-    marginLeft: 20, // Add spacing from buttons
+    alignItems: "center",
+    marginLeft: 20,
   },
   input: {
     width: 60,
