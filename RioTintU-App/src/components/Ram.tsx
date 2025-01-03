@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
     width: '100%',
-    height: '70%',
+    height: '65%',
     borderRadius: 24,
     padding: 15,
   },

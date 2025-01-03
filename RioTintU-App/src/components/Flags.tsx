@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
     width: '100%',
-    height: 100,
+    height: '11%',
     borderRadius: 24,
     padding: 15,
   },
@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#ffffff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   orange: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#CF7235',
     fontWeight: 'bold',
   },
