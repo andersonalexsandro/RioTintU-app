@@ -7,7 +7,7 @@ export function Ram() {
   const dataView = state.ram.getDataView();
 
   const renderDataView = () => {
-    const columns = 8;
+    const columns = 4;
     const totalRows = Math.ceil(dataView.byteLength / columns); 
     const rows = [];
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
     width: '100%',
-    height: '60%',
+    height: '70%',
     borderRadius: 24,
     padding: 15,
   },
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 27,
     fontWeight: 'bold',
     textAlign: 'center',
   },
