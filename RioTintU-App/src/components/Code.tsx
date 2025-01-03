@@ -12,8 +12,7 @@ interface CodeProps {
 
   const handleTextChange = (text: string) => {
     setCode(text);
-    setCodeLines(text.split("\n")); // Usa o valor atualizado diretamente
-    console.log(text.split("\n"));
+    setCodeLines(text.split("\n"));
   };
   
 

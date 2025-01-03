@@ -3,23 +3,21 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useCPU } from '../context/CpuContext';
 
 export function Ram() {
-  // Obtém a RAM do estado global do contexto
   const { state } = useCPU();
   const dataView = state.ram.getDataView();
 
-  // Renderiza os dados da memória em um formato de tabela
   const renderDataView = () => {
-    const columns = 8; // Número de colunas
-    const totalRows = Math.ceil(dataView.byteLength / columns); // Calcula o número total de linhas
+    const columns = 8;
+    const totalRows = Math.ceil(dataView.byteLength / columns); 
     const rows = [];
 
     for (let row = 0; row < totalRows; row++) {
       const items = [];
       for (let col = 0; col < columns; col++) {
-        const index = row + col * totalRows; // Índice vertical
+        const index = row + col * totalRows; 
         if (index < dataView.byteLength) {
-          const value = dataView.getUint8(index).toString().padStart(3, '0'); // Formata o valor
-          const formattedIndex = index.toString().padStart(3, '0'); // Formata o índice
+          const value = dataView.getUint8(index).toString().padStart(3, '0');
+          const formattedIndex = index.toString().padStart(3, '0');
           items.push(
             <View key={index} style={styles.item}>
               <Text style={styles.text}>
@@ -28,7 +26,6 @@ export function Ram() {
             </View>
           );
         } else {
-          // Preenche células vazias para alinhamento
           items.push(
             <View key={`empty-${col}-${row}`} style={styles.item}>
               <Text style={styles.text}> </Text>
@@ -56,7 +53,6 @@ export function Ram() {
   );
 }
 
-// Estilos
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#242424',
@@ -100,7 +96,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Estilo minimalista de scrollbar para plataformas web
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.innerHTML = `

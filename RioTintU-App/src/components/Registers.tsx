@@ -3,15 +3,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useCPU } from '../context/CpuContext';
 
 export function Registers() {
-  // Obtém os registradores do estado global
   const { state } = useCPU();
   const { registers } = state;
   const registerNames = registers.getRegisterNames();
 
-  // Renderiza os valores dos registradores em colunas
   const renderRegisters = () => {
-    const columns = 4; // Número de colunas na tabela
-    const totalRows = Math.ceil(registerNames.length / columns); // Total de linhas necessárias
+    const columns = 4; 
+    const totalRows = Math.ceil(registerNames.length / columns); 
     const rows = [];
 
     for (let row = 0; row < totalRows; row++) {
@@ -29,7 +27,6 @@ export function Registers() {
             </View>
           );
         } else {
-          // Adiciona células vazias para alinhamento
           items.push(
             <View key={`empty-${col}-${row}`} style={styles.item}>
               <Text style={styles.text}> </Text>
@@ -72,13 +69,13 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginBottom: 5,
-    justifyContent: 'center', // Centraliza as linhas horizontalmente
+    justifyContent: 'center',
     gap: 15,
   },
   item: {
-    alignItems: 'center', // Centraliza o conteúdo dentro do item
+    alignItems: 'center',
     justifyContent: 'center',
-    width: 80, // Define uma largura fixa para acomodar nomes de registradores maiores
+    width: 80,
   },
   text: {
     color: '#ffffff',
