@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
   lineNumbers: {
     backgroundColor: "#2e2e2e",
     paddingVertical: 10, // Adjusts vertical padding inside the line number column
-    width: 25,
-    alignItems: "center",
+    width: 30,
+    paddingRight: 5
   },
   lineNumber: {
     color: "#999999",
-    textAlign: "right",
+    textAlign: 'right',
     fontSize: 20, // Match font size with code input
     lineHeight: 28, // Ensure this matches the codeLine lineHeight
   },
