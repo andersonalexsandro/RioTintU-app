@@ -111,7 +111,7 @@ export function Home() {
 
       {/* Right Column */}
       <View style={[styles.column, { flex: 1.25 }]}>
-        <Code setCodeLines={setCodeLines} />
+        <Code setCodeLines={setCodeLines} pc={pc.getCounter()}/>
       </View>
     </View>
   );

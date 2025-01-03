@@ -3,9 +3,10 @@ import { View, TextInput, ScrollView, StyleSheet, Text } from "react-native";
 
 interface CodeProps {
   setCodeLines: React.Dispatch<React.SetStateAction<string[]>>;
+  pc: number;
 }
 
-export function Code({ setCodeLines }: CodeProps) {
+export function Code({ setCodeLines, pc }: CodeProps) {
   const [code, setCode] = useState("");
 
   const handleTextChange = (text: string) => {
@@ -24,7 +25,7 @@ export function Code({ setCodeLines }: CodeProps) {
       if (trimmedLine.startsWith("/") || trimmedLine.startsWith(".")) {
         return (
           <Text key={index} style={[styles.lineNumber, { opacity: 0 }]}>
-            " "
+            ""
           </Text>
         );
       }
@@ -33,8 +34,14 @@ export function Code({ setCodeLines }: CodeProps) {
       const currentNumber = lineNumber;
       lineNumber++; // Increment only for valid lines
       return (
-        <Text key={index} style={styles.lineNumber}>
-          {currentNumber + 1} {/* Numbering starts from 1 */}
+        <Text
+          key={index}
+          style={[
+            styles.lineNumber,
+            pc === currentNumber && styles.currentLine,
+          ]}
+        >
+          {currentNumber}
         </Text>
       );
     });
@@ -113,6 +120,9 @@ const styles = StyleSheet.create({
     lineHeight: 20, // Match lineHeight with line numbers
     height: "100%",
   },
+  currentLine: {
+    color: "#b3591e", // Highlight color for the current line
+  },
 });
 
 // Minimalistic scrollbar style (for web platforms)
@@ -136,4 +146,4 @@ if (typeof document !== "undefined") {
   document.head.appendChild(style);
 }
 
-export default Code;
+export default Code;  
