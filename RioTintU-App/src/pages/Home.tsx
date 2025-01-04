@@ -6,6 +6,7 @@ import Registers from "../components/Registers";
 import { Code } from "../components/Code";
 import { useCPU } from "../context/CpuContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import NumberDisplay from "../components/NumberDisplay";
 
 const RioTintUClockTick = 48;
 
@@ -72,6 +73,8 @@ export function Home() {
 
       {/* Center Column */}
       <View style={[styles.column, { flex: 2 }]}>
+
+        {/* Center Header */}
         <View style={styles.buttonsWrapper}>
           <View style={styles.buttons}>
             <TouchableOpacity style={styles.button} onPress={handleCompile}>
@@ -106,7 +109,18 @@ export function Home() {
             />
           </View>
         </View>
-        <Text style={styles.text}>PC: {pc.getCounter()}</Text>
+        {/* Post Header */}
+        <View style={styles.postHeader}>
+
+          <View style={styles.contentSection}>
+            <Text style={styles.text}>Other Content Here</Text>
+          </View>
+
+          <View style={styles.displaySection}>
+            <NumberDisplay value={pc.getCounter()} nDigites={3} />
+          </View>
+
+        </View>
       </View>
 
       {/* Right Column */}
@@ -165,6 +179,30 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     textAlign: "center",
     fontSize: 18,
+  },
+  numberDisplay: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  postHeader: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 10, // Espaço entre as divisões
+  },
+  displaySection: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    borderColor: "#b3591e", // (Opcional) Borda para visualização
+    borderWidth: 1, // (Opcional) Espessura da borda
+    borderRadius: 10, // (Opcional) Cantos arredondados
+    marginBottom: 10, // Espaçamento entre as linhas
+  },
+  contentSection: {
+    flex: 1,
+    borderColor: "#b3591e",
+    borderWidth: 1,
+    borderRadius: 10, // (Opcional) Cantos arredondados
   },
 });
 

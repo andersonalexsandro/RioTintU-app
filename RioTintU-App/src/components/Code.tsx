@@ -63,6 +63,7 @@ export function Code({ setCodeLines, pc }: CodeProps) {
         horizontal
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.codeWrapper}>
           {/* Line Numbers */}
@@ -73,17 +74,20 @@ export function Code({ setCodeLines, pc }: CodeProps) {
           </View>
 
           {/* Code Editor */}
-          <TextInput
-            style={styles.input}
-            multiline
-            placeholder="Write your code here..."
-            placeholderTextColor="#555"
-            value={code}
-            onChangeText={handleTextChange}
-            autoCapitalize="none"
-            autoCorrect={false}
-            textAlignVertical="top"
-          />
+          <ScrollView style={styles.codeContainer} contentContainerStyle={styles.scrollViewContent}>
+            <TextInput
+              style={styles.input}
+              multiline
+              placeholder="Write your code here..."
+              placeholderTextColor="#555"
+              value={code}
+              onChangeText={handleTextChange}
+              autoCapitalize="none"
+              autoCorrect={false}
+              textAlignVertical="top"
+              scrollEnabled={false} // Disable internal scrolling
+            />
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
@@ -121,6 +125,9 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 20, // Match font size with code input
     lineHeight: 28, // Ensure this matches the codeLine lineHeight
+  },
+  codeContainer: {
+    flex: 1,
   },
   input: {
     flex: 1,
