@@ -29,13 +29,100 @@ const digitPatterns: { [key: number]: number[] } = {
     0, 0, 0, 0, 1,
     0, 0, 0, 0, 0,
   ],
-  // Adicione os padrões para 2 a 9
+  2: [
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    0, 1, 1, 1, 0,
+  ],
+  3: [
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+  ],
+  4: [
+    0, 0, 0, 0, 0,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0,
+  ],
+  5: [
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+  ],
+  6: [
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    1, 0, 0, 0, 0,
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+  ],
+  7: [
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0,
+  ],
+  8: [
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+  ],
+  9: [
+    0, 1, 1, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    1, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 0, 0, 0, 1,
+    0, 1, 1, 1, 0,
+  ]
 };
 
 export function NumberDisplay({ value, nDigites }: { value: number; nDigites: number }) {
   const rows = 9;
   const columns = 5;
-  const pcString = String(value).padStart(nDigites, '0');
+  const pcString = String(value).padStart(nDigites, "0");
   const digits = pcString.split("").map((digit) => Number(digit));
 
   const renderPixels = (digit: number) => {
@@ -57,16 +144,29 @@ export function NumberDisplay({ value, nDigites }: { value: number; nDigites: nu
         </View>
       );
     }
-
     return grid;
+  };
+
+  const renderSpacer = () => {
+    // Espaço representado por uma coluna de PixelOff
+    return (
+      <View style={styles.digit}>
+        {Array.from({ length: rows }).map((_, rowIndex) => (
+          <View key={`spacer-${rowIndex}`} style={styles.row}>
+            <Image source={PixelOff} style={styles.pixel} />
+          </View>
+        ))}
+      </View>
+    );
   };
 
   return (
     <View style={styles.digitsContainer}>
       {digits.map((digit, index) => (
-        <View key={index} style={styles.digit}>
-          {renderPixels(digit)}
-        </View>
+        <React.Fragment key={index}>
+          <View style={styles.digit}>{renderPixels(digit)}</View>
+          {index < digits.length - 1 && renderSpacer()} {/* Adiciona o espaçador entre os dígitos */}
+        </React.Fragment>
       ))}
     </View>
   );
@@ -74,19 +174,18 @@ export function NumberDisplay({ value, nDigites }: { value: number; nDigites: nu
 
 const styles = StyleSheet.create({
   digitsContainer: {
-    flexDirection: 'row', // Coloca os dígitos lado a lado
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row", // Coloca os dígitos lado a lado
+    justifyContent: "center",
+    alignItems: "center",
   },
   digit: {
-    marginHorizontal: 5, // Espaçamento entre os dígitos
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   pixel: {
-    width: 10,
-    height: 10,
+    width: 8,
+    height: 8,
   },
 });
 

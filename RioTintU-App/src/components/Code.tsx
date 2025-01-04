@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, ScrollView, StyleSheet, Text } from "react-native";
+import { View, TextInput, ScrollView, StyleSheet, Text, Alert } from "react-native";
 
 interface CodeProps {
   setCodeLines: React.Dispatch<React.SetStateAction<string[]>>;
@@ -10,8 +10,26 @@ export function Code({ setCodeLines, pc }: CodeProps) {
   const [code, setCode] = useState("");
 
   const handleTextChange = (text: string) => {
+    const lines = text.split("\n");
+
+    // Filtrar apenas linhas válidas (não começam com '.', '/', ou '#')
+    const validLines = lines.filter(
+      (line) => 
+        line.trim() !== "" &&
+        !line.trim().startsWith(".") &&
+        !line.trim().startsWith("/") &&
+        !line.trim().startsWith("#")
+    );
+
+    // Verificar se excede o limite de linhas válidas
+    if (validLines.length > 256) {
+      Alert.alert("Line Limit Exceeded", "You cannot write more than 255 valid lines.");
+      return;
+    }
+
+    // Atualizar o estado se estiver dentro do limite
     setCode(text);
-    setCodeLines(text.split("\n"));
+    setCodeLines(lines);
   };
 
   const renderLineNumbers = () => {
@@ -20,6 +38,8 @@ export function Code({ setCodeLines, pc }: CodeProps) {
 
     return lines.map((line, index) => {
       const trimmedLine = line.trim();
+
+      // Verificar se a linha não é válida
       if (
         trimmedLine === "" || // Empty line
         trimmedLine.startsWith("/") || // Comment
@@ -33,6 +53,7 @@ export function Code({ setCodeLines, pc }: CodeProps) {
         );
       }
 
+      // Renderizar o número da linha para linhas válidas
       const currentNumber = lineNumber;
       lineNumber++;
       return (
@@ -100,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2e2e2e",
     paddingVertical: 10,
     minWidth: 30,
-    textAlign: 'right',
+    textAlign: "right",
   },
   lineNumber: {
     color: "#999999",

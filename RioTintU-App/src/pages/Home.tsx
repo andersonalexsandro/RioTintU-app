@@ -187,22 +187,22 @@ const styles = StyleSheet.create({
   postHeader: {
     flex: 1,
     flexDirection: "column",
-    gap: 10, // Espaço entre as divisões
+    gap: 10,
   },
   displaySection: {
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    borderColor: "#b3591e", // (Opcional) Borda para visualização
-    borderWidth: 1, // (Opcional) Espessura da borda
-    borderRadius: 10, // (Opcional) Cantos arredondados
-    marginBottom: 10, // Espaçamento entre as linhas
+    borderColor: "#b3591e", 
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: 10,
   },
   contentSection: {
     flex: 1,
     borderColor: "#b3591e",
     borderWidth: 1,
-    borderRadius: 10, // (Opcional) Cantos arredondados
+    borderRadius: 10,
   },
 });
 
