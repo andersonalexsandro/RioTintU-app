@@ -1,11 +1,8 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-
-// Substitua pelo caminho da sua imagem PNG
 const PixelOn = require('../../assets/redstone_lamp_on.png');
 const PixelOff = require('../../assets/redstone_lamp.png');
 
-// Definição dos padrões de pixels para cada dígito de 0 a 9
 const digitPatterns: { [key: number]: number[] } = {
   0: [
     0, 1, 1, 1, 0,
@@ -148,7 +145,6 @@ export function NumberDisplay({ value, nDigites }: { value: number; nDigites: nu
   };
 
   const renderSpacer = () => {
-    // Espaço representado por uma coluna de PixelOff
     return (
       <View style={styles.digit}>
         {Array.from({ length: rows }).map((_, rowIndex) => (
@@ -165,7 +161,7 @@ export function NumberDisplay({ value, nDigites }: { value: number; nDigites: nu
       {digits.map((digit, index) => (
         <React.Fragment key={index}>
           <View style={styles.digit}>{renderPixels(digit)}</View>
-          {index < digits.length - 1 && renderSpacer()} {/* Adiciona o espaçador entre os dígitos */}
+          {index < digits.length - 1 && renderSpacer()}
         </React.Fragment>
       ))}
     </View>
@@ -174,7 +170,7 @@ export function NumberDisplay({ value, nDigites }: { value: number; nDigites: nu
 
 const styles = StyleSheet.create({
   digitsContainer: {
-    flexDirection: "row", // Coloca os dígitos lado a lado
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
