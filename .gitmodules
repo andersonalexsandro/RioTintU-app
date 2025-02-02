@@ -1,0 +1,3 @@
+[submodule "src/RioTintU-VM"]
+	path = src/RioTintU-VM
+	url = https://github.com/andersonalexsandro/RioTintU-VM.git
