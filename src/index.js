@@ -1,4 +1,4 @@
-import { RioTintUInit } from "./RioTintU-VM/ts/build/main"
+import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js"
 
 const {
     cpu,
