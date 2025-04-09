@@ -14,7 +14,6 @@ const {
     assembler
 } = RioTintUInit();
 
-// função que carrega dinamicamente o HTML
 async function loadRamComponent() {
     const response = await fetch('./components/ram/ram.html');
     const html = await response.text();
@@ -24,7 +23,17 @@ async function loadRamComponent() {
     renderRam(ram);
 }
 
-document.addEventListener('DOMContentLoaded', loadRamComponent);
+async function loadFlagsComponent() {
+    const response = await fetch('./components/flags/flags.html');
+    const html = await response.text();
+
+    document.getElementById('flags-placeholder').innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadRamComponent();
+    await loadFlagsComponent();
+});
 
 export {
     ram,
