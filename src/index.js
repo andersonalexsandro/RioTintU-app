@@ -1,5 +1,6 @@
 import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
 import { renderRam } from "./components/ram/ram.js";
+import { renderFlags } from "./components/flags/flags.js";
 
 const {
     ram,
@@ -19,7 +20,6 @@ async function loadRamComponent() {
     const html = await response.text();
 
     document.getElementById('ram-placeholder').innerHTML = html;
-
     renderRam(ram);
 }
 
@@ -28,22 +28,10 @@ async function loadFlagsComponent() {
     const html = await response.text();
 
     document.getElementById('flags-placeholder').innerHTML = html;
+    renderFlags(flags);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadRamComponent();
     await loadFlagsComponent();
 });
-
-export {
-    ram,
-    cpu,
-    rom,
-    registers,
-    flags,
-    pc,
-    numberDisplay,
-    screen,
-    memoryMapper,
-    assembler
-};

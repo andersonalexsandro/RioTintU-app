@@ -1,11 +1,5 @@
-import { ram } from '../../index.js';
-
 export function renderRam(ramInstance) {
     const ramGrid = document.getElementById('ram-grid');
-    if (!ramGrid) {
-        console.error('Contêiner RAM não encontrado!');
-        return;
-    }
 
     ramGrid.innerHTML = '';
 

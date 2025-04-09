@@ -1,0 +1,36 @@
+.flags-container h3 {
+    margin-top: 0px;
+    margin-bottom: 0.75rem;
+}
+
+
+#flags-content {
+    display: flex;
+    justify-content: center;
+}
+
+.flag-list {
+    display: flex;
+    gap: 1rem; 
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flag-item {
+    display: flex;
+    gap: 0.5rem; 
+    align-items: center; 
+    padding: 0.5rem;
+    background-color: #333;
+    border-radius: 4px;
+}
+
+.flag-name {
+    font-weight: bold;
+    color: orange;
+}
+
+.flag-value {
+    color: #fff;
+}
