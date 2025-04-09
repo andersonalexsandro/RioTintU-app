@@ -1,8 +1,9 @@
-import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js"
+import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
+import { renderRam } from "./components/ram/ram.js";
 
 const {
-    cpu,
     ram,
+    cpu,
     rom,
     registers,
     flags,
@@ -13,5 +14,27 @@ const {
     assembler
 } = RioTintUInit();
 
-console.log("Hello World")
-console.log(ram);
+// função que carrega dinamicamente o HTML
+async function loadRamComponent() {
+    const response = await fetch('./components/ram/ram.html');
+    const html = await response.text();
+
+    document.getElementById('ram-placeholder').innerHTML = html;
+
+    renderRam(ram);
+}
+
+document.addEventListener('DOMContentLoaded', loadRamComponent);
+
+export {
+    ram,
+    cpu,
+    rom,
+    registers,
+    flags,
+    pc,
+    numberDisplay,
+    screen,
+    memoryMapper,
+    assembler
+};
