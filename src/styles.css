@@ -100,3 +100,21 @@ body {
     flex-direction: column;
     overflow-y: auto;
 }
+
+.column-right::-webkit-scrollbar {
+    width: 8px;
+}
+
+.column-right::-webkit-scrollbar-thumb {
+    background-color: #5a5a5a;
+    border-radius: 4px;
+}
+
+.column-right::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.column-right::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background: transparent;
+}
