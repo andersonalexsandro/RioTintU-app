@@ -1,8 +1,11 @@
+.flags-container {
+    padding: 1rem;
+}
+
 .flags-container h3 {
     margin-top: 0px;
     margin-bottom: 0.75rem;
 }
-
 
 #flags-content {
     display: flex;

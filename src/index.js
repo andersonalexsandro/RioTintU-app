@@ -2,6 +2,7 @@ import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
 import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
+import { renderRom } from "./components/rom/rom.js";
 
 const {
     ram,
@@ -40,8 +41,17 @@ async function loadRegistersComponent() {
     renderRegisters(registers);
 }
 
+async function loadRomComponent() {
+    const response = await fetch('./components/rom/rom.html');
+    const html = await response.text();
+
+    document.getElementById('rom-placeholder').innerHTML = html;
+    renderRom();
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadRamComponent();
     await loadFlagsComponent();
     await loadRegistersComponent();
+    await loadRomComponent();
 });
