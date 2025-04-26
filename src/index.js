@@ -5,6 +5,7 @@ import { renderRegisters } from "./components/registers/registers.js";
 import { renderRom } from "./components/rom/rom.js";
 import { renderPC } from "./components/pc/pc.js";
 import { renderNumberDisplay } from "./components/numberDisplay/numberDisplay.js";
+import { renderScreen, updateScreen } from "./components/screen/screen.js";
 
 const {
     ram,
@@ -69,7 +70,18 @@ async function loadNumberDisplayComponent() {
     document.getElementById('number-display-placeholder').innerHTML = html;
 
     requestAnimationFrame(() => {
-        renderNumberDisplay(0); // Inicializa o display com 0
+        renderNumberDisplay(numberDisplay.content || 0);
+    });
+}
+
+async function loadScreenComponent() {
+    const response = await fetch('./components/screen/screen.html');
+    const html = await response.text();
+
+    document.getElementById('screen-placeholder').innerHTML = html;
+
+    requestAnimationFrame(() => {
+        renderScreen(screen); // Inicializa a tela com o conteúdo atual da screen
     });
 }
 
@@ -80,4 +92,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadRomComponent();
     await loadPCComponent();
     await loadNumberDisplayComponent();
+    await loadScreenComponent();
 });
