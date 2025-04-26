@@ -1,34 +1,31 @@
-.background {
-    background-color: #1e1e1e;
-}
-
-.container {
+.rom-container {
     display: flex;
     flex-direction: column;
     background-color: #1e1e1e;
-    overflow: hidden;
     height: 100%;
     width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
 }
-
-.scroll-view {
+  
+.rom-scroll-view {
     flex: 1;
     overflow-y: auto;
     background-color: #1e1e1e;
-    max-height: 100%; /* Garante que o scroll-view não ultrapasse o contêiner pai */
+    max-height: none; /* agora controlado pelo pai (.column-right) */
 }
-
-.code-wrapper {
+  
+  .rom-code-wrapper {
     display: flex;
     flex-direction: row;
-    height: auto; /* Ajusta a altura dinamicamente */
-    max-height: 100%; /* Garante que o wrapper não ultrapasse o contêiner pai */
-}
-
-.line-numbers {
+    height: auto;
+    max-height: 100%;
+  }
+  
+  .rom-line-numbers {
     background-color: #2e2e2e;
     padding: 10px 5px;
-    min-width: 25px;
+    min-width: 35px;
     text-align: right;
     color: #999999;
     font-family: monospace;
@@ -36,21 +33,21 @@
     line-height: 24px;
     user-select: none;
     height: 100%;
-}
-
-.line-number {
+  }
+  
+  .rom-line-number {
     height: 24px;
-}
-
-.line-number.hidden {
+  }
+  
+  .rom-line-number.hidden {
     opacity: 0;
-}
-
-.current-line {
+  }
+  
+  .rom-line-number.current {
     color: #b3591e;
-}
-
-#code-editor {
+  }
+  
+  #rom-code-editor {
     flex: 1;
     color: #ffffff;
     font-size: 18px;
@@ -63,4 +60,5 @@
     resize: none;
     font-family: monospace;
     overflow: hidden;
-}
+  }
+  

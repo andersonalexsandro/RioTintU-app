@@ -19,7 +19,6 @@ body {
 }
 
 .middle {
-    height: calc(100vh - 2rem); 
     width: 40%;
     margin: 1rem 0; 
 }
@@ -97,4 +96,7 @@ body {
     width: 30%;
     background-color: rgb(34, 34, 34);
     border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
