@@ -1,11 +1,16 @@
-// Configurações principais
+// segment-display.js
+
 const rows = 9;
 const columns = 5;
-const pixelSize = 8; // Tamanho de cada pixel
-const spacerWidth = 2; // Espaço entre dígitos
+const pixelSize = 8;
+const spacerWidth = 2;
 
 const pixelOnSrc = '/src/assets/redstone_lamp_on.png';
 const pixelOffSrc = '/src/assets/redstone_lamp.png';
+
+let pixelOn = null;
+let pixelOff = null;
+let imagesLoaded = false;
 
 const digitPatterns = {
   0: [
@@ -119,10 +124,39 @@ const digitPatterns = {
     0, 1, 1, 1, 0
   ]
 };
+// Função para carregar as imagens uma única vez
+function loadImages() {
+  return new Promise((resolve, reject) => {
+    pixelOn = new Image();
+    pixelOff = new Image();
+    
+    let loadedCount = 0;
 
-export function renderSegmentDisplay(canvas, value, nDigits) {
+    const checkLoaded = () => {
+      loadedCount++;
+      if (loadedCount === 2) {
+        imagesLoaded = true;
+        resolve();
+      }
+    };
+
+    pixelOn.onload = checkLoaded;
+    pixelOff.onload = checkLoaded;
+
+    pixelOn.onerror = () => reject(new Error('Failed to load pixelOn image'));
+    pixelOff.onerror = () => reject(new Error('Failed to load pixelOff image'));
+
+    pixelOn.src = pixelOnSrc;
+    pixelOff.src = pixelOffSrc;
+  });
+}
+
+export async function renderSegmentDisplay(canvas, value, nDigits) {
+  if (!imagesLoaded) {
+    await loadImages(); // Garante que as imagens foram carregadas antes de desenhar
+  }
+
   const ctx = canvas.getContext('2d');
-
   const pcString = String(value).padStart(nDigits, '0');
   const digits = pcString.split('').map(Number);
 
@@ -134,36 +168,19 @@ export function renderSegmentDisplay(canvas, value, nDigits) {
   canvas.width = totalWidth;
   canvas.height = totalHeight;
 
-  const pixelOn = new Image();
-  const pixelOff = new Image();
-  pixelOn.src = pixelOnSrc;
-  pixelOff.src = pixelOffSrc;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  pixelOff.onload = () => {
-      pixelOn.onload = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+  digits.forEach((digit, digitIndex) => {
+    const pattern = digitPatterns[digit];
+    const offsetX = digitIndex * (digitWidth + spacerWidth);
 
-          digits.forEach((digit, digitIndex) => {
-              const pattern = digitPatterns[digit];
-              const offsetX = digitIndex * (digitWidth + spacerWidth);
-
-              for (let row = 0; row < rows; row++) {
-                  for (let col = 0; col < columns; col++) {
-                      const pixelValue = pattern[row * columns + col];
-                      const x = offsetX + col * pixelSize;
-                      const y = row * pixelSize;
-                      ctx.drawImage(pixelValue ? pixelOn : pixelOff, x, y, pixelSize, pixelSize);
-                  }
-              }
-          });
-      };
-  };
-
-  pixelOff.onerror = () => {
-      console.error('Failed to load pixelOff image:', pixelOffSrc);
-  };
-
-  pixelOn.onerror = () => {
-      console.error('Failed to load pixelOn image:', pixelOnSrc);
-  };
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < columns; col++) {
+        const pixelValue = pattern[row * columns + col];
+        const x = offsetX + col * pixelSize;
+        const y = row * pixelSize;
+        ctx.drawImage(pixelValue ? pixelOn : pixelOff, x, y, pixelSize, pixelSize);
+      }
+    }
+  });
 }
