@@ -4,6 +4,7 @@ import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
 import { renderRom } from "./components/rom/rom.js";
 import { renderPC } from "./components/pc/pc.js";
+import { renderNumberDisplay } from "./components/numberDisplay/numberDisplay.js";
 
 const {
     ram,
@@ -61,10 +62,22 @@ async function loadPCComponent() {
     });
 }
 
+async function loadNumberDisplayComponent() {
+    const response = await fetch('./components/numberDisplay/numberDisplay.html');
+    const html = await response.text();
+
+    document.getElementById('number-display-placeholder').innerHTML = html;
+
+    requestAnimationFrame(() => {
+        renderNumberDisplay(0); // Inicializa o display com 0
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadRamComponent();
     await loadFlagsComponent();
     await loadRegistersComponent();
     await loadRomComponent();
     await loadPCComponent();
+    await loadNumberDisplayComponent();
 });
