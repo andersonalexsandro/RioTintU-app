@@ -3,6 +3,7 @@ import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
 import { renderRom } from "./components/rom/rom.js";
+import { renderPC } from "./components/pc/pc.js";
 
 const {
     ram,
@@ -49,9 +50,21 @@ async function loadRomComponent() {
     renderRom();
 }
 
+async function loadPCComponent() {
+    const response = await fetch('./components/pc/pc.html');
+    const html = await response.text();
+
+    document.getElementById('pc-placeholder').innerHTML = html;
+
+    requestAnimationFrame(() => {
+        renderPC(pc.counter || 0);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadRamComponent();
     await loadFlagsComponent();
     await loadRegistersComponent();
     await loadRomComponent();
+    await loadPCComponent();
 });

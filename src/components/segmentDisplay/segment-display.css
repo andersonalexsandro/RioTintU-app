@@ -1,0 +1,7 @@
+#segment-display {
+    border: 3px solid #793508;
+    border-radius: 3px;
+    background-color: #1e1e1e;
+    display: block;
+    margin: 0 auto;
+}
