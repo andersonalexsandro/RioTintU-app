@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="../src/components/segmentDisplay/segment-display.css">
     <link rel="stylesheet" type="text/css" href="../src/components/pc/pc.css">
     <link rel="stylesheet" type="text/css" href="../src/components/numberDisplay/numberDisplay.css">
+    <link rel="stylesheet" type="text/css" href="../src/components/screen/screen.css">
     <script src='index.js' type="module"></script>
 </head>
 <body>
@@ -32,8 +33,27 @@
     </div>
 
     <div class="middle">
-        <div id="pc-placeholder"></div>
-        <div id="number-display-placeholder"></div>
+
+        <div class="middle-top">
+            <div class="buttons-div">
+                <button id="compile">Compile</button>
+                <button id="run">Run</button>
+                <button id="step">Step</button>
+                <button id="restart">Restart</button>
+            </div>
+            <div class="speed-div">
+                <label for="speed-input" style="color: #cccccc;">Instructions Per Second:</label>
+                <input type="number" id="speed-input" name="speed" min="1" max="1000" value="5">
+            </div>
+        </div>
+
+        <div id="screen-placeholder"></div>
+
+        <div class="middle-bottom">
+            <div id="number-display-placeholder"></div>
+            <div id="pc-placeholder"></div>
+        </div>
+
     </div>
 
     <div class="column-right background">
