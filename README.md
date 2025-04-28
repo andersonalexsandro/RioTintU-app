@@ -1,3 +1,45 @@
+# RioTintU-App
+
+This project is an emulator of an 8-bit Minecraft-inspired CPU.
+It makes it possible to program and debug custom programs.
+
+- **GUI inspiration:** [Design on Figma](https://www.figma.com/design/reAwBcXTrX9SvhKPDcNfPZ/RioTintU-VM?node-id=0-1&node-type=canvas&t=g7MBf4HXQpEMsfbd-0)
+- **Instruction Set Architecture:** [ISA Document](https://docs.google.com/spreadsheets/d/1ce8okA9Iy8wLN9gtn3IzqqO52bT0SPEkzZ5C6IkLoVc/edit?gid=0#gid=0)
+- **Running Fibonacci Sequence Example:** [YouTube](https://www.youtube.com/watch?v=nEHz9QRe7IQ)
+
+## Specifications
+
+- 256 x 16-bit Instruction Read-Only Memory (ROM), 8-bit address - 512 bytes total
+- 8-bit Program Counter (PC) - address range 0 ~ 255
+- 256 x 8-bit Random Access Memory (RAM), 8-bit address - 256 bytes total
+- 8-bit Arithmetic Logic Unit (ALU) supporting addition and bitwise operations
+- 8 ALU Flags: COUT, !COUT, ZERO, !ZERO, EVEN, !EVEN, MSB, !MSB
+- 16 x 8-bit Dual Read Registers (r0 to r15) — r0 is always zero
+- 32 x 32 Pixel Display (Memory Mapped I/O)
+- 16-bit Number Display (Memory Mapped I/O)
+
+## Objectives
+
+- Create an Assembler for the customized [ISA](https://docs.google.com/spreadsheets/d/1ce8okA9Iy8wLN9gtn3IzqqO52bT0SPEkzZ5C6IkLoVc/edit?gid=0#gid=0)
+- Run programs based on the assembled Machine Code
+- Emulate the internal states and contents of every CPU component
+
+# Running the Project
+
+Follow the steps below to properly clone and set up the project:
+
+```bash
+git clone --recurse-submodules <repository-url>
+cd RioTintU-app
+cd src/RioTintU-VM/ts
+npm install
+npm run build
+```
+
+> **Note:** Make sure you have Node.js (recommended version: 18+) installed.
+
+---
+
 # Valid Assembly Writing Guide for the Assembler
 
 This document describes the syntax, rules, and best practices for writing valid Assembly code compatible with the **Assembler**.
@@ -15,15 +57,15 @@ Each line of code can contain:
 - **Label (optional):** Starts with a `.` (dot) and must be defined alone on a line.
 - **Instruction (mandatory):** A keyword recognized by the assembler.
 - **Arguments (depending on the instruction):** Registers, immediate values, labels, or defines.
-- **Comments:** Not processed directly but can be added using `//`, `#`, or `;` (optional).
+- **Comments:** Can be added using `//`, `#`, or `;` (optional).
 
 ---
 
 ## 2. Valid Instructions
 
 ```
-nop, hlt, add, sub, nor, and, xor, rsh, 
-ldi, adi, jmp, brh, jid, adc, lod, str, 
+nop, hlt, add, sub, nor, and, xor, rsh,
+ldi, adi, jmp, brh, jid, adc, lod, str,
 cmp, mov, neg, not, inc, dec, lsh
 ```
 
@@ -79,16 +121,16 @@ define SCREEN_WIDTH 128
 
 Recognized conditions for `BRH`:
 
-| Condition | Keyword | Alternatives |
-|:---------:|:-------:|:------------:|
-| Positive | `pos` | `>0`, `notmsb` |
-| Negative | `neg` | `<0`, `msb` |
-| Less than | `lt` | `<`, `notcarry` |
-| Greater or equal | `ge` | `>=`, `carry` |
-| Equal | `eq` | `=`, `zero` |
-| Not equal | `ne` | `!=`, `notzero` |
-| Odd | `odd` | `!%2`, `noteven` |
-| Even | `even` | `%2`, `even` |
+| Condition        | Keyword | Alternatives     |
+|:----------------:|:-------:|:----------------:|
+| Positive         | `pos`   | `>0`, `notmsb`    |
+| Negative         | `neg`   | `<0`, `msb`       |
+| Less than        | `lt`    | `<`, `notcarry`   |
+| Greater or equal | `ge`    | `>=`, `carry`     |
+| Equal            | `eq`    | `=`, `zero`       |
+| Not equal        | `ne`    | `!=`, `notzero`   |
+| Odd              | `odd`   | `!%2`, `noteven`  |
+| Even             | `even`  | `%2`, `even`      |
 
 ---
 
@@ -107,8 +149,8 @@ Mapped starting from address `246`.
 
 ## 8. Expected Arguments by Instruction
 
-| Instruction | Arguments | Note |
-|:-----------:|:---------:|:----:|
+| Instruction | Arguments | Note                       |
+|:-----------:|:---------:|:---------------------------:|
 | `ldi`, `adi`, `jid` | 2 | register, immediate or symbol |
 | `add`, `sub`, `and`, `xor`, `nor`, `adc` | 3 | regC regA regB |
 | `lod`, `str` | 2 or 3 | regC regA [offset] |
@@ -172,7 +214,7 @@ The assembler automatically validates:
 - Invalid registers or values.
 - Duplicate labels or defines.
 
-In case of an error, the line and corresponding message will be reported.
+If an error occurs, the line and the corresponding message will be reported.
 
 ---
 
