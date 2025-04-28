@@ -2,12 +2,83 @@ import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
 import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
-import { renderRom } from "./components/rom/rom.js";
+import { renderRom, getRomCode } from "./components/rom/rom.js";
 import { renderPC } from "./components/pc/pc.js";
 import { renderNumberDisplay } from "./components/numberDisplay/numberDisplay.js";
 import { renderScreen, updateScreen } from "./components/screen/screen.js";
 
-const {
+let {
+  ram,
+  cpu,
+  rom,
+  registers,
+  flags,
+  pc,
+  numberDisplay,
+  screen,
+  memoryMapper,
+  assembler
+} = RioTintUInit();
+
+let runInterval = null;
+
+function renderAllComponents() {
+  renderRam(ram);
+  renderFlags(flags);
+  renderRegisters(registers);
+  renderPC(pc.counter || 0);
+  renderNumberDisplay(numberDisplay.content || 0);
+  updateScreen(screen);
+}
+
+function handleRunClick() {
+    if (runInterval) {
+      clearInterval(runInterval);
+      runInterval = null;
+      return;
+    }
+  
+    const speedInput = document.getElementById('speed-input');
+    const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
+    const intervalMs = 1000 / instructionsPerSecond;
+  
+    runInterval = setInterval(() => {
+      try {
+        cpu.step();
+        renderAllComponents();
+      } catch (error) {
+        console.error('Erro durante a execução:', error);
+        clearInterval(runInterval);
+        runInterval = null;
+        alert('Erro durante a execução. Verifique o console para mais detalhes.');
+      }
+    }, intervalMs);
+}
+   
+
+function handleStepClick() {
+    if (runInterval) {
+      clearInterval(runInterval);
+      runInterval = null;
+    }
+  
+    try {
+      cpu.step();
+      renderAllComponents();
+    } catch (error) {
+      console.error('Erro durante a execução:', error);
+      alert('Erro durante a execução. Verifique o console para mais detalhes.');
+    }
+  }
+  
+
+function handleRestartClick() {
+  if (runInterval) {
+    clearInterval(runInterval);
+    runInterval = null;
+  }
+
+  ({
     ram,
     cpu,
     rom,
@@ -18,79 +89,75 @@ const {
     screen,
     memoryMapper,
     assembler
-} = RioTintUInit();
+  } = RioTintUInit());
 
-async function loadRamComponent() {
-    const response = await fetch('./components/ram/ram.html');
-    const html = await response.text();
-
-    document.getElementById('ram-placeholder').innerHTML = html;
-    renderRam(ram);
+  renderAllComponents();
 }
 
-async function loadFlagsComponent() {
-    const response = await fetch('./components/flags/flags.html');
-    const html = await response.text();
-
-    document.getElementById('flags-placeholder').innerHTML = html;
-    renderFlags(flags);
+function handleCompileClick() {
+    const romCode = getRomCode();
+    console.log('Compilando o código da ROM:', romCode);
+  
+    try {
+      const compiledCode = assembler.assemble(romCode.split('\n'));
+  
+      for (let i = 0; i < compiledCode.length; i++) {
+        const numericCode = parseInt(compiledCode[i], 2); // Converte de binário (base 2) para número
+        rom.set16(i, numericCode);
+        console.log(numericCode);
+      }
+    } catch (error) {
+      console.error('Erro durante a compilação:', error);
+      alert('Erro durante a compilação. Verifique o console para mais detalhes.');
+    }
 }
 
-async function loadRegistersComponent() {
-    const response = await fetch('./components/registers/registers.html');
-    const html = await response.text();
+function updateRunInterval() {
+    if (!runInterval) return;
+  
+    clearInterval(runInterval);
+  
+    const speedInput = document.getElementById('speed-input');
+    const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
+    const intervalMs = 1000 / instructionsPerSecond;
+  
+    runInterval = setInterval(() => {
+      try {
+        cpu.step();
+        renderAllComponents();
+      } catch (error) {
+        console.error('Erro durante a execução:', error);
+        clearInterval(runInterval);
+        runInterval = null;
+        alert('Erro durante a execução. Verifique o console para mais detalhes.');
+      }
+    }, intervalMs);
+  }
+  
 
-    document.getElementById('registers-placeholder').innerHTML = html;
-    renderRegisters(registers);
+async function loadComponent(path, placeholderId, renderFunction) {
+  const response = await fetch(path);
+  const html = await response.text();
+  document.getElementById(placeholderId).innerHTML = html;
+  requestAnimationFrame(() => renderFunction());
 }
 
-async function loadRomComponent() {
-    const response = await fetch('./components/rom/rom.html');
-    const html = await response.text();
-
-    document.getElementById('rom-placeholder').innerHTML = html;
-    renderRom();
-}
-
-async function loadPCComponent() {
-    const response = await fetch('./components/pc/pc.html');
-    const html = await response.text();
-
-    document.getElementById('pc-placeholder').innerHTML = html;
-
-    requestAnimationFrame(() => {
-        renderPC(pc.counter || 0);
-    });
-}
-
-async function loadNumberDisplayComponent() {
-    const response = await fetch('./components/numberDisplay/numberDisplay.html');
-    const html = await response.text();
-
-    document.getElementById('number-display-placeholder').innerHTML = html;
-
-    requestAnimationFrame(() => {
-        renderNumberDisplay(numberDisplay.content || 0);
-    });
-}
-
-async function loadScreenComponent() {
-    const response = await fetch('./components/screen/screen.html');
-    const html = await response.text();
-
-    document.getElementById('screen-placeholder').innerHTML = html;
-
-    requestAnimationFrame(() => {
-        renderScreen(screen); // Inicializa a tela com o conteúdo atual da screen
-    });
+async function loadAllComponents() {
+  await loadComponent('./components/ram/ram.html', 'ram-placeholder', () => renderRam(ram));
+  await loadComponent('./components/flags/flags.html', 'flags-placeholder', () => renderFlags(flags));
+  await loadComponent('./components/registers/registers.html', 'registers-placeholder', () => renderRegisters(registers));
+  await loadComponent('./components/rom/rom.html', 'rom-placeholder', renderRom);
+  await loadComponent('./components/pc/pc.html', 'pc-placeholder', () => renderPC(pc.counter || 0));
+  await loadComponent('./components/numberDisplay/numberDisplay.html', 'number-display-placeholder', () => renderNumberDisplay(numberDisplay.content || 0));
+  await loadComponent('./components/screen/screen.html', 'screen-placeholder', () => renderScreen(screen));
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadRamComponent();
-    await loadFlagsComponent();
-    await loadRegistersComponent();
-    await loadRomComponent();
-    await loadPCComponent();
-    await loadNumberDisplayComponent();
-    await loadScreenComponent();
+  await loadAllComponents();
+
+  document.getElementById('compile').addEventListener('click', handleCompileClick);
+  document.getElementById('run').addEventListener('click', handleRunClick);
+  document.getElementById('step').addEventListener('click', handleStepClick);
+  document.getElementById('restart').addEventListener('click', handleRestartClick);
+  document.getElementById('speed-input').addEventListener('input', updateRunInterval);
 });
