@@ -38,6 +38,21 @@ npm run build
 
 > **Note:** Make sure you have Node.js (recommended version: 18+) installed.
 
+## Opening the Project in the Browser
+
+To view the project in your browser using Visual Studio Code:
+
+1. Open the project folder in Visual Studio Code.
+2. Install the **Live Server** extension:
+   - Open the Extensions panel (Ctrl+Shift+X).
+   - Search for **Live Server** by *Ritwick Dey*.
+   - Click **Install**.
+3. Navigate to the `src` folder inside the project.
+4. Right-click on the `index.html` file.
+5. Select **"Open with Live Server"**.
+
+Your project will automatically open in your default web browser.
+
 ---
 
 # Valid Assembly Writing Guide for the Assembler
