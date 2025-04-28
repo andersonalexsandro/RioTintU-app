@@ -128,3 +128,17 @@ export function getRomCode() {
   const editor = document.getElementById('rom-code-editor');
   return editor.value;
 }
+
+export function highlightRomLine(pcValue) {
+  const lineNumbers = document.querySelectorAll('.rom-line-number');
+
+  lineNumbers.forEach(line => {
+    if (parseInt(line.textContent) === pcValue) {
+      line.style.color = 'orange';
+      line.style.fontWeight = 'bold';
+    } else {
+      line.style.color = 'white';
+      line.style.fontWeight = 'normal';
+    }
+  });
+}

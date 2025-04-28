@@ -2,7 +2,7 @@ import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
 import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
-import { renderRom, getRomCode } from "./components/rom/rom.js";
+import { renderRom, getRomCode, highlightRomLine } from "./components/rom/rom.js";
 import { renderPC } from "./components/pc/pc.js";
 import { renderNumberDisplay } from "./components/numberDisplay/numberDisplay.js";
 import { renderScreen, updateScreen } from "./components/screen/screen.js";
@@ -29,48 +29,47 @@ function renderAllComponents() {
   renderPC(pc.counter || 0);
   renderNumberDisplay(numberDisplay.content || 0);
   updateScreen(screen);
+  highlightRomLine(pc.counter || 0);
 }
 
 function handleRunClick() {
-    if (runInterval) {
-      clearInterval(runInterval);
-      runInterval = null;
-      return;
-    }
-  
-    const speedInput = document.getElementById('speed-input');
-    const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
-    const intervalMs = 1000 / instructionsPerSecond;
-  
-    runInterval = setInterval(() => {
-      try {
-        cpu.step();
-        renderAllComponents();
-      } catch (error) {
-        console.error('Erro durante a execução:', error);
-        clearInterval(runInterval);
-        runInterval = null;
-        alert('Erro durante a execução. Verifique o console para mais detalhes.');
-      }
-    }, intervalMs);
-}
-   
+  if (runInterval) {
+    clearInterval(runInterval);
+    runInterval = null;
+    return;
+  }
 
-function handleStepClick() {
-    if (runInterval) {
-      clearInterval(runInterval);
-      runInterval = null;
-    }
-  
+  const speedInput = document.getElementById('speed-input');
+  const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
+  const intervalMs = 1000 / instructionsPerSecond;
+
+  runInterval = setInterval(() => {
     try {
       cpu.step();
       renderAllComponents();
     } catch (error) {
-      console.error('Erro durante a execução:', error);
-      alert('Erro durante a execução. Verifique o console para mais detalhes.');
+      console.error('Error during execution:', error);
+      clearInterval(runInterval);
+      runInterval = null;
+      alert('Error during execution. Check the console for more details.');
     }
+  }, intervalMs);
+}
+
+function handleStepClick() {
+  if (runInterval) {
+    clearInterval(runInterval);
+    runInterval = null;
   }
-  
+
+  try {
+    cpu.step();
+    renderAllComponents();
+  } catch (error) {
+    console.error('Error during execution:', error);
+    alert('Error during execution. Check the console for more details.');
+  }
+}
 
 function handleRestartClick() {
   if (runInterval) {
@@ -95,45 +94,44 @@ function handleRestartClick() {
 }
 
 function handleCompileClick() {
-    const romCode = getRomCode();
-    console.log('Compilando o código da ROM:', romCode);
-  
-    try {
-      const compiledCode = assembler.assemble(romCode.split('\n'));
-  
-      for (let i = 0; i < compiledCode.length; i++) {
-        const numericCode = parseInt(compiledCode[i], 2); // Converte de binário (base 2) para número
-        rom.set16(i, numericCode);
-        console.log(numericCode);
-      }
-    } catch (error) {
-      console.error('Erro durante a compilação:', error);
-      alert('Erro durante a compilação. Verifique o console para mais detalhes.');
+  const romCode = getRomCode();
+  console.log('Compiling ROM code:', romCode);
+
+  try {
+    const compiledCode = assembler.assemble(romCode.split('\n'));
+
+    for (let i = 0; i < compiledCode.length; i++) {
+      const numericCode = parseInt(compiledCode[i], 2);
+      rom.set16(i, numericCode);
+      console.log(numericCode);
     }
+  } catch (error) {
+    console.error('Error during compilation:', error);
+    alert('Error during compilation. Check the console for more details.');
+  }
 }
 
 function updateRunInterval() {
-    if (!runInterval) return;
-  
-    clearInterval(runInterval);
-  
-    const speedInput = document.getElementById('speed-input');
-    const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
-    const intervalMs = 1000 / instructionsPerSecond;
-  
-    runInterval = setInterval(() => {
-      try {
-        cpu.step();
-        renderAllComponents();
-      } catch (error) {
-        console.error('Erro durante a execução:', error);
-        clearInterval(runInterval);
-        runInterval = null;
-        alert('Erro durante a execução. Verifique o console para mais detalhes.');
-      }
-    }, intervalMs);
-  }
-  
+  if (!runInterval) return;
+
+  clearInterval(runInterval);
+
+  const speedInput = document.getElementById('speed-input');
+  const instructionsPerSecond = parseInt(speedInput.value, 10) || 1;
+  const intervalMs = 1000 / instructionsPerSecond;
+
+  runInterval = setInterval(() => {
+    try {
+      cpu.step();
+      renderAllComponents();
+    } catch (error) {
+      console.error('Error during execution:', error);
+      clearInterval(runInterval);
+      runInterval = null;
+      alert('Error during execution. Check the console for more details.');
+    }
+  }, intervalMs);
+}
 
 async function loadComponent(path, placeholderId, renderFunction) {
   const response = await fetch(path);
