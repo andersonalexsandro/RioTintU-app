@@ -29,8 +29,8 @@ It makes it possible to program and debug custom programs.
 Follow the steps below to properly clone and set up the project:
 
 ```bash
-git clone --recurse-submodules <repository-url>
 cd RioTintU-app
+git submodule update --init --recursive
 cd src/RioTintU-VM/ts
 npm install
 npm run build
