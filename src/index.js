@@ -95,9 +95,15 @@ function handleRestartClick() {
 
 function handleCompileClick() {
   const romCode = getRomCode();
-  console.log('Compiling ROM code:', romCode);
 
   try {
+
+    const errors = assembler.validateAssembly(romCode.split('\n'));
+    if (errors.length > 0) {
+      console.log(errors)
+      throw new Error("Error during compilation")
+    }
+
     const compiledCode = assembler.assemble(romCode.split('\n'));
 
     for (let i = 0; i < compiledCode.length; i++) {
@@ -106,8 +112,8 @@ function handleCompileClick() {
       console.log(numericCode);
     }
   } catch (error) {
-    console.error('Error during compilation:', error);
-    alert('Error during compilation. Check the console for more details.');
+      alert('Error during compilation. Check the console for more details.');
+      console.log(error)
   }
 }
 
