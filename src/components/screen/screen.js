@@ -1,5 +1,5 @@
-const pixelOnSrc = '/src/assets/redstone_lamp_on.png';
-const pixelOffSrc = '/src/assets/redstone_lamp.png';
+const pixelOnSrc = './assets/redstone_lamp_on.png';
+const pixelOffSrc = './assets/redstone_lamp.png';
 
 let pixelOn = null;
 let pixelOff = null;

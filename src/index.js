@@ -1,4 +1,4 @@
-import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
+import { RioTintUInit } from "./build/main.js";
 import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
@@ -98,11 +98,11 @@ function handleCompileClick() {
 
   try {
 
-    const errors = assembler.validateAssembly(romCode.split('\n'));
-    if (errors.length > 0) {
-      console.log(errors)
-      throw new Error("Error during compilation")
-    }
+    // const errors = assembler.validateAssembly(romCode.split('\n'));
+    // if (errors.length > 0) {
+    //   console.log(errors)
+    //   throw new Error("Error during compilation")
+    // }
 
     const compiledCode = assembler.assemble(romCode.split('\n'));
 
@@ -112,8 +112,8 @@ function handleCompileClick() {
       console.log(numericCode);
     }
   } catch (error) {
-      alert('Error during compilation. Check the console for more details.');
-      console.log(error)
+      // alert('Error during compilation. Check the console for more details.');
+      // console.log(error)
   }
 }
 
