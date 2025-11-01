@@ -1,4 +1,4 @@
-import { RioTintUInit } from "./build/main.js";
+import { RioTintUInit } from "./RioTintU-VM/ts/build/main.js";
 import { renderRam } from "./components/ram/ram.js";
 import { renderFlags } from "./components/flags/flags.js";
 import { renderRegisters } from "./components/registers/registers.js";
@@ -6,6 +6,7 @@ import { renderRom, getRomCode, highlightRomLine } from "./components/rom/rom.js
 import { renderPC } from "./components/pc/pc.js";
 import { renderNumberDisplay } from "./components/numberDisplay/numberDisplay.js";
 import { renderScreen, updateScreen } from "./components/screen/screen.js";
+import './styles.css';
 
 let {
   ram,
